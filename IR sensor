@@ -1,0 +1,24 @@
+int sensor = 2;
+int a = 25;
+int b = 32;
+int sensorvalue = 0;
+int span = 200;
+void setup(){
+  pinMode( sensor, INPUT);
+  Serial.begin (9600);
+  pinMode (a, OUTPUT);
+  pinMode (b, OUTPUT);
+}
+void loop(){
+  sensorvalue = analogRead (sensor);
+  Serial.println(sensorvalue);
+  delay (500);
+  if (sensorvalue > span){
+    digitalWrite (a, LOW);
+    digitalWrite (b, HIGH);
+  }
+  else {
+    digitalWrite (a, HIGH);
+    digitalWrite (b, LOW);
+  }
+}
