@@ -1,0 +1,53 @@
+#define BLYNK_PRINT Serial
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <BlynkSimpleEsp32.h>
+#include "DHT.h"
+
+// You should get Auth Token in the Blynk App.
+// Go to the Project Settings (nut icon).
+char auth[] = "4bdeb4cdd81b41ebbce681a819b5bcc8";
+
+// Your WiFi credentials.
+// Set password to "" for open networks.
+char ssid[] = "Sushi";
+char pass[] = "dsafsdcs";
+#define DHTPIN 17
+#define DHTTYPE DHT11 
+DHT dht(DHTPIN,DHTTYPE);
+BlynkTimer timer;
+//const char server[] = "your server"; 
+
+WiFiClient client;
+
+void sendSensor()
+{
+  float h = dht.readHumidity();
+  float t = dht.readTemperature(); // or dht.readTemperature(true) for Fahrenheit
+
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+  // You can send any value at any time.
+  // Please don't send more that 10 values per second.
+  Blynk.virtualWrite(V5, h);
+  Blynk.virtualWrite(V6, t);
+}
+
+void setup()
+{
+  // Debug console
+  Serial.begin(9600);
+  Blynk.begin(auth, ssid, pass, IPAddress (188,166,206,43),8442);
+  dht.begin();
+
+  // Setup a function to be called every second
+  timer.setInterval(1000L, sendSensor);
+}
+
+void loop()
+{
+  Blynk.run();
+  timer.run();
+}
