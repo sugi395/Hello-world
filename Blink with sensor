@@ -1,0 +1,24 @@
+//INITIAL PIN//
+int sensor = 34;
+int biru = 17;
+int hijau = 18;
+int sensorvalue = 0;
+int batas = 300;
+//
+void setup(){
+  pinMode( sensor, INPUT);
+  Serial.begin (9600);
+}
+void loop(){
+  sensorvalue = analogRead (sensor);
+  Serial.println(sensorvalue);
+  delay (500);
+  if (sensorvalue > batas){
+    digitalWrite (biru, LOW);
+    digitalWrite (hijau, HIGH);
+  }
+  else {
+    digitalWrite (biru, HIGH);
+    digitalWrite (hijau, LOW);
+  }
+}
